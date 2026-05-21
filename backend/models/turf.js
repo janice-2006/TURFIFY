@@ -34,4 +34,4 @@ const turfSchema = new mongoose.Schema({
     upiId: { type: String, default: 'merchant@okaxis' }, // Payment details for the turf
 }, { timestamps: true });
 
-module.exports = mongoose.model('Turf', turfSchema);
+module.exports = mongoose.model('Turf', turfSchema, 'turfs');

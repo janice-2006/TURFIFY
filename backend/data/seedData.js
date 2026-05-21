@@ -527,7 +527,7 @@ const coaches = [
         timings: '05:00 AM - 07:00 AM, 05:00 PM - 07:00 PM'
     },
     {
-        name: 'Best Coaches Multi Sports Academy',
+        name: 'Best Coaches Volleyball Academy',
         description: 'Multi-sport fitness and activities camp for children. Ideal for developing general athleticism, hand-eye coordination, and team play.',
         sport: 'Volleyball',
         rating: 4.5,
@@ -540,7 +540,7 @@ const coaches = [
         timings: '07:00 AM - 09:00 AM (Sat-Sun)'
     },
     {
-        name: 'Altius Sports Academy',
+        name: 'Altius Basketball Academy',
         description: 'Professional sports conditioning and athletic coaching for competitive tournament players.',
         sport: 'Basketball',
         rating: 4.6,
@@ -553,73 +553,8 @@ const coaches = [
         timings: '06:00 AM - 08:00 AM'
     },
     {
-        name: 'First Touch Football Academy',
-        description: 'Elite training facility for intermediate to advanced football players. Specialized tactical coaching.',
-        sport: 'Football',
-        rating: 4.8,
-        reviewCount: 55,
-        images: ['https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=600&h=400&fit=crop'],
-        location: { area: 'Kilpauk', address: 'Sports Sanity, Kilpauk, Chennai - 600010' },
-        fees: 2500,
-        experience: '9+ Years',
-        contact: '9876543225',
-        timings: '06:00 PM - 08:00 PM'
-    },
-    {
-        name: 'Racketry',
-        description: 'Specialist badminton academy focused on footwork, racket speed, and court positioning.',
-        sport: 'Badminton',
-        rating: 4.7,
-        reviewCount: 42,
-        images: ['https://images.unsplash.com/photo-1613918431703-aa50889e3be2?w=600&h=400&fit=crop'],
-        location: { area: 'Kellys', address: 'UNIQ Badminton Academy, Kellys, Chennai - 600010' },
-        fees: 2400,
-        experience: '6+ Years',
-        contact: '9876543226',
-        timings: '04:00 PM - 06:00 PM'
-    },
-    {
-        name: 'Women’s Badminton Coaching at Shuttler',
-        description: 'Exclusive ladies-only batches for badminton. Friendly environment, basic and advanced skill training.',
-        sport: 'Badminton',
-        rating: 4.9,
-        reviewCount: 40,
-        images: ['https://images.unsplash.com/photo-1613918431703-aa50889e3be2?w=600&h=400&fit=crop'],
-        location: { area: 'Kellys', address: 'Serve N Smash, Kellys, Chennai - 600010' },
-        fees: 2500,
-        experience: '8+ Years',
-        contact: '9876543227',
-        timings: '08:00 AM - 10:00 AM (Mon-Wed-Fri)'
-    },
-    {
-        name: 'Summer Turf Camp',
-        description: 'Vibrant summer coaching camp for school students. Multiple sports including Football, Cricket and Fitness routines.',
-        sport: 'Cricket',
-        rating: 4.4,
-        reviewCount: 29,
-        images: ['https://images.unsplash.com/photo-1531415080290-bc98545ab3ef?w=600&h=400&fit=crop'],
-        location: { area: 'Aminjikarai', address: 'Sportsaal Turf, Aminjikarai, Chennai - 600029' },
-        fees: 1800,
-        experience: '4+ Years',
-        contact: '9876543228',
-        timings: '08:00 AM - 11:00 AM (Daily)'
-    },
-    {
-        name: 'PV Tarun Badminton Programme',
-        description: 'Intense high-performance program by former national-level player PV Tarun. Advanced training schedules.',
-        sport: 'Badminton',
-        rating: 4.9,
-        reviewCount: 92,
-        images: ['https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop'],
-        location: { area: 'Shenoy Nagar', address: 'GJ Badminton Academy, Shenoy Nagar, Chennai - 600030' },
-        fees: 4000,
-        experience: '12+ Years',
-        contact: '9876543229',
-        timings: '05:00 AM - 08:00 AM, 04:00 PM - 07:00 PM'
-    },
-    {
-        name: 'Prochamps Academy',
-        description: 'Multi-sport academy offering premium training programs in football, tennis and athletic fitness.',
+        name: 'Prochamps Tennis Academy',
+        description: 'Multi-sport academy offering premium training programs in tennis and athletic fitness.',
         sport: 'Tennis',
         rating: 4.6,
         reviewCount: 33,
@@ -631,7 +566,7 @@ const coaches = [
         timings: '06:00 AM - 08:00 AM'
     },
     {
-        name: 'Pickleball Coaching by Deuce Academy',
+        name: 'Deuce Pickleball Academy',
         description: 'Learn pickleball from certified instructors. Drills for dinks, drops, drives, and tournament match play.',
         sport: 'Pickleball',
         rating: 4.7,
@@ -644,17 +579,43 @@ const coaches = [
         timings: '07:00 AM - 09:00 AM'
     },
     {
-        name: 'Gopi’s Pickleball Academy',
-        description: 'Group and individual pickleball training lessons. Beginner-friendly drills to get you match-ready fast.',
-        sport: 'Pickleball',
+        name: 'Madras Kabaddi Club',
+        description: 'Traditional kabaddi training focusing on agility, strength, and pro-kabaddi level defense and raiding techniques.',
+        sport: 'Kabaddi',
         rating: 4.8,
-        reviewCount: 35,
-        images: ['https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600&h=400&fit=crop'],
-        location: { area: 'Shenoy Nagar', address: 'Dink N Smash Pickleball Club, Shenoy Nagar, Chennai - 600030' },
-        fees: 2200,
-        experience: '6+ Years',
-        contact: '9876543232',
-        timings: '05:00 PM - 07:00 PM'
+        reviewCount: 45,
+        images: ['https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&h=400&fit=crop'],
+        location: { area: 'T Nagar', address: 'T Nagar Sports Complex, Chennai - 600017' },
+        fees: 1500,
+        experience: '12+ Years',
+        contact: '9876543233',
+        timings: '06:30 AM - 08:30 AM, 05:00 PM - 07:00 PM'
+    },
+    {
+        name: 'Velocity Kho Kho Academy',
+        description: 'Learn speed and evasion in this traditional Indian sport. Specialized batches for inter-school tournament prep.',
+        sport: 'Kho Kho',
+        rating: 4.6,
+        reviewCount: 28,
+        images: ['https://images.unsplash.com/photo-1628126235206-5260b9ea6441?w=600&h=400&fit=crop'],
+        location: { area: 'Velachery', address: 'Velocity Sports Hub - Velachery, Chennai - 600042' },
+        fees: 1200,
+        experience: '5+ Years',
+        contact: '9876543234',
+        timings: '05:00 PM - 07:30 PM (Mon-Wed-Fri)'
+    },
+    {
+        name: 'Super Kings Cricket Coaching',
+        description: 'Advanced net sessions, batting, and bowling machine practice with professional ranji-level coaches.',
+        sport: 'Cricket',
+        rating: 4.9,
+        reviewCount: 110,
+        images: ['https://images.unsplash.com/photo-1531415080290-bc98545ab3ef?w=600&h=400&fit=crop'],
+        location: { area: 'Pallikaranai', address: 'Pallikaranai Sports Complex, Chennai - 600100' },
+        fees: 3500,
+        experience: '15+ Years',
+        contact: '9876543235',
+        timings: '06:00 PM - 09:00 PM'
     }
 ];
 

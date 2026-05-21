@@ -1,10 +1,33 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Turf = require('../models/turf');
+const { queryLocalTurfs, getLocalTurfById } = require('../data/localTurfs');
+
 const router = express.Router();
+
+const isDbConnected = () => mongoose.connection.readyState === 1;
+
+// GET all unique locations (for dropdown) — must be before /:id
+router.get('/locations/all', async (req, res) => {
+    try {
+        if (!isDbConnected()) {
+            const { locations } = queryLocalTurfs({ limit: 1000 });
+            return res.json(locations);
+        }
+        const locations = await Turf.distinct('location.area');
+        res.json(locations);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+});
 
 // GET all turfs with filters and pagination
 router.get('/', async (req, res) => {
     try {
+        if (!isDbConnected()) {
+            return res.json(queryLocalTurfs(req.query));
+        }
+
         const { location, sport, search, sortBy, minPrice, maxPrice, page = 1, limit = 100 } = req.query;
 
         const pageNumber = parseInt(page);
@@ -13,29 +36,24 @@ router.get('/', async (req, res) => {
 
         let query = {};
 
-        // Filter by location/area
         if (location && location !== 'All') {
             query['location.area'] = new RegExp(location, 'i');
         }
 
-        // Filter by sport
         if (sport && sport !== 'All') {
             query.sports = sport;
         }
 
-        // Search by name
         if (search) {
             query.name = new RegExp(search, 'i');
         }
 
-        // Price range
         if (minPrice || maxPrice) {
             query.pricePerHour = {};
             if (minPrice) query.pricePerHour.$gte = Number(minPrice);
             if (maxPrice) query.pricePerHour.$lte = Number(maxPrice);
         }
 
-        // Sorting
         let sort = {};
         if (sortBy === 'rating') {
             sort = { rating: -1 };
@@ -46,7 +64,7 @@ router.get('/', async (req, res) => {
         } else if (sortBy === 'reviews') {
             sort = { reviewCount: -1 };
         } else {
-            sort = { rating: -1 }; // Default
+            sort = { rating: -1 };
         }
 
         const totalCount = await Turf.countDocuments(query);
@@ -55,7 +73,6 @@ router.get('/', async (req, res) => {
             .skip(skip)
             .limit(limitNumber);
 
-        // Get unique locations for dropdown
         const locations = await Turf.distinct('location.area');
 
         res.json({
@@ -64,34 +81,36 @@ router.get('/', async (req, res) => {
             totalCount,
             currentPage: pageNumber,
             totalPages: Math.ceil(totalCount / limitNumber),
-            hasMore: skip + turfs.length < totalCount
+            hasMore: skip + turfs.length < totalCount,
         });
     } catch (err) {
-        res.status(500).json({ message: 'Server error', error: err.message });
+        res.json(queryLocalTurfs(req.query));
     }
 });
 
 // GET single turf by ID
 router.get('/:id', async (req, res) => {
     try {
+        if (!isDbConnected()) {
+            const turf = getLocalTurfById(req.params.id);
+            if (!turf) {
+                return res.status(404).json({ message: 'Turf not found' });
+            }
+            return res.json(turf);
+        }
+
         const turf = await Turf.findById(req.params.id);
 
         if (!turf) {
+            const localTurf = getLocalTurfById(req.params.id);
+            if (localTurf) return res.json(localTurf);
             return res.status(404).json({ message: 'Turf not found' });
         }
 
         res.json(turf);
     } catch (err) {
-        res.status(500).json({ message: 'Server error', error: err.message });
-    }
-});
-
-// GET all unique locations (for dropdown)
-router.get('/locations/all', async (req, res) => {
-    try {
-        const locations = await Turf.distinct('location.area');
-        res.json(locations);
-    } catch (err) {
+        const localTurf = getLocalTurfById(req.params.id);
+        if (localTurf) return res.json(localTurf);
         res.status(500).json({ message: 'Server error', error: err.message });
     }
 });
@@ -99,6 +118,9 @@ router.get('/locations/all', async (req, res) => {
 // POST create new turf (for admin)
 router.post('/', async (req, res) => {
     try {
+        if (!isDbConnected()) {
+            return res.status(503).json({ message: 'Database not connected. Cannot create turf offline.' });
+        }
         const turf = new Turf(req.body);
         await turf.save();
         res.status(201).json(turf);

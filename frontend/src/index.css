@@ -1,0 +1,121 @@
+/* ============================================
+   TAILWIND DIRECTIVES (MUST BE FIRST)
+   ============================================ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   GLOBAL RESET & BASE STYLES
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-deepBlack text-accentWhite font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================
+   CUSTOM COMPONENT CLASSES
+   ============================================ */
+
+/* Primary Neon Button */
+.btn-primary {
+  @apply bg-primary text-deepBlack font-bold py-3 px-6 rounded-full transition-all duration-300 hover:scale-105 active:scale-95;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(204, 255, 0, 0.6);
+}
+
+/* Secondary Outline Button */
+.btn-secondary {
+  @apply border-2 border-primary text-primary font-bold py-3 px-6 rounded-full transition-all duration-300 hover:bg-primary hover:text-deepBlack;
+}
+
+/* Card Styling */
+.card {
+  @apply bg-cardBlack rounded-2xl overflow-hidden transition-all duration-300 hover:ring-2 hover:ring-primary;
+}
+
+/* Input Fields */
+.input-field {
+  @apply bg-cardBlack border border-gray-700 rounded-lg px-4 py-3 text-accentWhite focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300;
+}
+
+/* Navigation Links */
+.nav-link {
+  @apply text-gray-400 hover:text-primary transition-colors duration-300 font-medium relative;
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS
+   ============================================ */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   SCROLLBAR CUSTOMIZATION
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-deepBlack;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+code {
+  @apply font-mono bg-cardBlack px-2 py-1 rounded text-sm;
+}

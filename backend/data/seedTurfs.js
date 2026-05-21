@@ -292,7 +292,10 @@ const turfs = [
         sports: ['Football', 'Cricket', 'Badminton'],
         rating: 4.2,
         reviewCount: 53,
-        images: ['https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=800'],
+        images: [
+            'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800',
+            'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800'
+        ],
         amenities: ['Parking', 'Changing Room', 'Drinking Water', 'Canteen'],
         openingHours: { start: '05:30', end: '22:00' },
         featured: false,
