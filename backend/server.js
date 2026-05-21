@@ -5,6 +5,11 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const turfRoutes = require('./routes/turfs');
+const bookingRoutes = require('./routes/bookings');
+const coachRoutes = require('./routes/coaches');
+const tournamentRoutes = require('./routes/tournaments');
+
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
@@ -20,11 +25,18 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/turfs', turfRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/coaches', coachRoutes);
+app.use('/api/tournaments', tournamentRoutes);
 
 // Test Route
 app.get('/', (req, res) => {
     res.json({ message: 'Turfify API is running!' });
 });
+
+// Error Handling
+app.use(notFound);
+app.use(errorHandler);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

@@ -1,7 +1,22 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
+
 const Turf = require('../models/turf');
-const turfs = require('../data/seedTurfs');
+const Coach = require('../models/coach');
+const Tournament = require('../models/tournament');
+
+const seedTurfs = require('../data/seedTurfs');
+const { turfs: dataTurfs, tournaments, coaches } = require('../data/seedData');
+
+// Merge turfs from both files, avoiding duplicates by name
+const seenNames = new Set();
+const allTurfs = [];
+for (const t of seedTurfs) {
+    if (!seenNames.has(t.name)) { seenNames.add(t.name); allTurfs.push(t); }
+}
+for (const t of dataTurfs) {
+    if (!seenNames.has(t.name)) { seenNames.add(t.name); allTurfs.push(t); }
+}
 
 const seedDatabase = async () => {
     try {
@@ -9,13 +24,25 @@ const seedDatabase = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('✅ Connected to MongoDB');
 
-        // Clear existing turfs
+        // Clear existing collections
         await Turf.deleteMany({});
         console.log('🗑️  Cleared existing turfs');
 
-        // Insert new turfs
-        await Turf.insertMany(turfs);
-        console.log(`✅ Seeded ${turfs.length} turfs successfully!`);
+        await Coach.deleteMany({});
+        console.log('🗑️  Cleared existing coaches');
+
+        await Tournament.deleteMany({});
+        console.log('🗑️  Cleared existing tournaments');
+
+        // Insert new data
+        await Turf.insertMany(allTurfs);
+        console.log(`✅ Seeded ${allTurfs.length} turfs successfully!`);
+
+        await Coach.insertMany(coaches);
+        console.log(`✅ Seeded ${coaches.length} coaches successfully!`);
+
+        await Tournament.insertMany(tournaments);
+        console.log(`✅ Seeded ${tournaments.length} tournaments successfully!`);
 
         // Close connection
         await mongoose.connection.close();

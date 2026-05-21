@@ -2,15 +2,19 @@ const express = require('express');
 const Turf = require('../models/turf');
 const router = express.Router();
 
-// GET all turfs with filters
+// GET all turfs with filters and pagination
 router.get('/', async (req, res) => {
     try {
-        const { location, sport, search, sortBy, minPrice, maxPrice } = req.query;
+        const { location, sport, search, sortBy, minPrice, maxPrice, page = 1, limit = 100 } = req.query;
+
+        const pageNumber = parseInt(page);
+        const limitNumber = parseInt(limit);
+        const skip = (pageNumber - 1) * limitNumber;
 
         let query = {};
 
         // Filter by location/area
-        if (location) {
+        if (location && location !== 'All') {
             query['location.area'] = new RegExp(location, 'i');
         }
 
@@ -45,7 +49,11 @@ router.get('/', async (req, res) => {
             sort = { rating: -1 }; // Default
         }
 
-        const turfs = await Turf.find(query).sort(sort);
+        const totalCount = await Turf.countDocuments(query);
+        const turfs = await Turf.find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limitNumber);
 
         // Get unique locations for dropdown
         const locations = await Turf.distinct('location.area');
@@ -53,7 +61,10 @@ router.get('/', async (req, res) => {
         res.json({
             turfs,
             locations,
-            count: turfs.length
+            totalCount,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalCount / limitNumber),
+            hasMore: skip + turfs.length < totalCount
         });
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });

@@ -31,6 +31,7 @@ const turfSchema = new mongoose.Schema({
     bookable: { type: Boolean, default: true },
     capacity: { type: Number }, // Number of players
     turfType: { type: String, enum: ['Indoor', 'Outdoor', 'Covered'], default: 'Outdoor' },
+    upiId: { type: String, default: 'merchant@okaxis' }, // Payment details for the turf
 }, { timestamps: true });
 
 module.exports = mongoose.model('Turf', turfSchema);
