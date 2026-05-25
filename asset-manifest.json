@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/TURFIFY/static/css/main.168efb77.css",
+    "main.js": "/TURFIFY/static/js/main.6f350847.js",
+    "static/js/453.825386d9.chunk.js": "/TURFIFY/static/js/453.825386d9.chunk.js",
+    "index.html": "/TURFIFY/index.html",
+    "main.168efb77.css.map": "/TURFIFY/static/css/main.168efb77.css.map",
+    "main.6f350847.js.map": "/TURFIFY/static/js/main.6f350847.js.map",
+    "453.825386d9.chunk.js.map": "/TURFIFY/static/js/453.825386d9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.168efb77.css",
+    "static/js/main.6f350847.js"
+  ]
+}
