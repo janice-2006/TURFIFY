@@ -17,6 +17,7 @@ const turfRoutes = require('./routes/turfs');
 const bookingRoutes = require('./routes/bookings');
 const coachRoutes = require('./routes/coaches');
 const tournamentRoutes = require('./routes/tournaments');
+const paymentRoutes = require('./routes/payment');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -85,6 +86,7 @@ connectMongo().then(() => {
     app.use('/api/bookings', bookingRoutes);
     app.use('/api/coaches', coachRoutes);
     app.use('/api/tournaments', tournamentRoutes);
+    app.use('/api/payment', paymentRoutes);
 
     // Test Route
     app.get('/', (req, res) => {

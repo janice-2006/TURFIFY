@@ -6,10 +6,14 @@ import TurfDetails from './pages/TurfDetails';
 import BookingPage from './pages/BookingPage';
 import PaymentPage from './pages/PaymentPage';
 import ProfilePage from './pages/ProfilePage';
+import MyBookingsPage from './pages/MyBookingsPage';
 import CoachingPage from './pages/CoachingPage';
 import TournamentsPage from './pages/TournamentsPage';
 import CoachDetails from './pages/CoachDetails';
 import TournamentDetails from './pages/TournamentDetails';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -21,6 +25,8 @@ function App() {
 
         {/* Authentication */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
         {/* Coaching & Tournaments */}
         <Route path="/coaching" element={<CoachingPage />} />
@@ -35,6 +41,10 @@ function App() {
 
         {/* User Profile */}
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/my-bookings" element={<MyBookingsPage />} />
+        
+        {/* Admin Dashboard */}
+        <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
 
         {/* Other Pages (Temporary redirects to Home) */}
         <Route path="/training" element={<CoachingPage />} />

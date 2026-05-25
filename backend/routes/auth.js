@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { OAuth2Client } = require('google-auth-library');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const User = require('../models/user');
 const auth = require('../middleware/authMiddleware');
 const localUsers = require('../data/localUsers');
@@ -25,6 +27,7 @@ const sendAuthResponse = (res, user, status = 200) => {
             lastName: user.lastName,
             email: user.email,
             image: user.image,
+            role: user.role || 'user'
         },
     };
     res.status(status).json(payload);
@@ -33,10 +36,17 @@ const sendAuthResponse = (res, user, status = 200) => {
 // REGISTER
 router.post('/register', async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, role, adminSecret } = req.body;
 
         if (!email || !password || !firstName || !lastName) {
             return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        // Validate Admin Secret if role is admin
+        if (role === 'admin') {
+            if (adminSecret !== 'TURFIFYADMIN2026') {
+                return res.status(401).json({ message: 'Invalid Admin Secret key' });
+            }
         }
 
         if (!isDbConnected()) {
@@ -61,6 +71,7 @@ router.post('/register', async (req, res) => {
             lastName,
             email,
             password: hashedPassword,
+            role: role === 'admin' ? 'admin' : 'user'
         });
 
         await user.save();
@@ -113,6 +124,9 @@ router.get('/profile', auth, async (req, res) => {
             return res.json({ ...safe, name: localUsers.formatUser(user).name });
         }
 
+        if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
+            return res.status(400).json({ message: 'Invalid user ID format. Please log in again.' });
+        }
         const user = await User.findById(req.user.id).select('-password');
         if (!user) return res.status(404).json({ message: 'User not found' });
         res.json(user);
@@ -143,6 +157,9 @@ router.put('/profile', auth, async (req, res) => {
             });
         }
 
+        if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
+            return res.status(400).json({ message: 'Invalid user ID format. Please log in again.' });
+        }
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
@@ -243,6 +260,115 @@ router.post('/google', async (req, res) => {
             message: 'Google authentication failed',
             error: err.message,
         });
+    }
+});
+
+// FORGOT PASSWORD
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!isDbConnected()) {
+            return res.status(500).json({ message: 'Database not connected, cannot reset password.' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found with this email' });
+        }
+
+        // Generate token
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        
+        // Hash token and set to resetPasswordToken field
+        const resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        const resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+        user.resetPasswordToken = resetPasswordToken;
+        user.resetPasswordExpire = resetPasswordExpire;
+        await user.save();
+
+        // Create reset url
+        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+        // Setup Nodemailer
+        // Need ethereal email or generic SMTP if actual email is not provided.
+        // For development, you can use Gmail or simply log it.
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        const message = `
+            <h1>You have requested a password reset</h1>
+            <p>Please go to this link to reset your password:</p>
+            <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+        `;
+
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER || 'noreply@turfify.com',
+                to: user.email,
+                subject: 'Turfify Password Reset',
+                html: message
+            });
+
+            res.status(200).json({ success: true, message: 'Email sent' });
+        } catch (error) {
+            console.log("-----------------------------------------");
+            console.log("Email could not be sent (Likely due to missing EMAIL_USER/EMAIL_PASS in .env)");
+            console.log("DEV BYPASS: Here is your password reset link to test locally:");
+            console.log(resetUrl);
+            console.log("-----------------------------------------");
+            
+            // In a real app we might reset the tokens if email fails, but keeping it 
+            // open here so you can copy-paste from terminal during development
+            return res.status(200).json({ success: true, message: 'Email bypassed for Dev Mode. Check terminal for link!' });
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// RESET PASSWORD
+router.post('/reset-password/:token', async (req, res) => {
+    try {
+        if (!isDbConnected()) {
+            return res.status(500).json({ message: 'Database not connected' });
+        }
+
+        // Get hashed token
+        const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+
+        // Set new password
+        const { password } = req.body;
+        if (!password) {
+            return res.status(400).json({ message: 'Please provide a new password' });
+        }
+
+        user.password = await bcrypt.hash(password, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password reset successful' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

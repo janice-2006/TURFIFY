@@ -128,6 +128,12 @@ const Navbar = ({ onSearch, onLocationChange, locations = [], showFilters = true
                     {/* Right - Navigation Links */}
                     <div className="flex items-center gap-2 sm:gap-6">
                         <div className="flex items-center gap-3 sm:gap-6 mr-2 sm:mr-4">
+                            {isLoggedIn && (
+                                <Link to="/my-bookings" className={navLinkClass('/my-bookings')}>My Bookings</Link>
+                            )}
+                            {isLoggedIn && user?.role === 'admin' && (
+                                <Link to="/admin-dashboard" className={navLinkClass('/admin-dashboard')}>Owner Dashboard</Link>
+                            )}
                             <Link to="/coaching" className={navLinkClass('/coaching')}>Coaching</Link>
                             <Link to="/tournaments" className={navLinkClass('/tournaments')}>Tournament</Link>
                         </div>

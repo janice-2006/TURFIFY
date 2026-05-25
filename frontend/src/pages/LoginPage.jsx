@@ -9,7 +9,9 @@ const LoginPage = () => {
         lastName: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        role: 'user',
+        adminSecret: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ const LoginPage = () => {
         try {
             const endpoint = isSignUp ? '/api/auth/register' : '/api/auth/login';
             const payload = isSignUp
-                ? { firstName: formData.firstName, lastName: formData.lastName, email: formData.email, password: formData.password }
+                ? { firstName: formData.firstName, lastName: formData.lastName, email: formData.email, password: formData.password, role: formData.role, adminSecret: formData.adminSecret }
                 : { email: formData.email, password: formData.password };
 
             const response = await fetch(`http://localhost:5000${endpoint}`, {
@@ -255,15 +257,61 @@ const LoginPage = () => {
                             />
 
                             {isSignUp && (
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    className="input-field w-full"
-                                    placeholder="Confirm Password"
-                                    required={isSignUp}
-                                />
+                                <>
+                                    <input
+                                        type="password"
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        className="input-field w-full"
+                                        placeholder="Confirm Password"
+                                        required={isSignUp}
+                                    />
+                                    
+                                    {/* Role Selection */}
+                                    <div className="mb-4 mt-2">
+                                        <label className="block text-sm font-medium text-gray-300 mb-2">I am signing up as a:</label>
+                                        <div className="flex gap-4">
+                                            <label className="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white text-sm">
+                                                <input 
+                                                    type="radio" 
+                                                    name="role" 
+                                                    value="user" 
+                                                    checked={formData.role === 'user'} 
+                                                    onChange={handleChange} 
+                                                    className="accent-primary w-4 h-4"
+                                                />
+                                                Customer (Book Turfs)
+                                            </label>
+                                            <label className="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white text-sm">
+                                                <input 
+                                                    type="radio" 
+                                                    name="role" 
+                                                    value="admin" 
+                                                    checked={formData.role === 'admin'} 
+                                                    onChange={handleChange} 
+                                                    className="accent-primary w-4 h-4"
+                                                />
+                                                Turf Owner
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Admin Secret Key */}
+                                    {formData.role === 'admin' && (
+                                        <div className="mb-2 transition-all">
+                                            <input
+                                                type="password"
+                                                name="adminSecret"
+                                                value={formData.adminSecret}
+                                                onChange={handleChange}
+                                                className="input-field w-full"
+                                                placeholder="Owner Secret Key (e.g. TURFIFYADMIN2026)"
+                                                required={formData.role === 'admin'}
+                                            />
+                                        </div>
+                                    )}
+                                </>
                             )}
 
                             {!isSignUp && (
