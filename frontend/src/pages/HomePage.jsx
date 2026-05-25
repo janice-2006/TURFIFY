@@ -22,11 +22,11 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches`)
+        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches`)
             .then((res) => res.json())
             .then((data) => setCoachCount(Array.isArray(data) ? data.length : 0))
             .catch(() => {});
-        fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tournaments`)
+        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tournaments`)
             .then((res) => res.json())
             .then((data) => setTournamentCount(Array.isArray(data) ? data.length : 0))
             .catch(() => {});
@@ -54,7 +54,7 @@ const HomePage = () => {
             params.append('page', pageNum);
             params.append('limit', 100);
 
-            const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/turfs?${params}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/turfs?${params}`);
             const data = await response.json();
 
             if (response.ok) {

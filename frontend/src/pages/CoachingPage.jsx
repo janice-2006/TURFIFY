@@ -21,7 +21,7 @@ const CoachingPage = () => {
                 if (selectedSport !== 'All') params.append('sport', selectedSport);
                 if (searchQuery) params.append('search', searchQuery);
 
-                const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches?${params}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches?${params}`);
                 const data = await response.json();
 
                 if (response.ok) {

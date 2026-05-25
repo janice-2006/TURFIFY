@@ -9,7 +9,7 @@ const CoachDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/coaches/${id}`)
             .then(res => res.json())
             .then(data => {
                 setCoach(data);

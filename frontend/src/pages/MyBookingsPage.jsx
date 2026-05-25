@@ -19,7 +19,7 @@ const MyBookingsPage = () => {
 
             try {
                 // Adjust route based on user ID logic in the backend
-                const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/user/${user.id}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/user/${user.id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

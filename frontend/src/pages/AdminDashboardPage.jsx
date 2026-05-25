@@ -26,7 +26,7 @@ const AdminDashboardPage = () => {
             try {
                 // In a real database scenario with properly linked models, you'd fetch only the admin's turfs.
                 // Here we fetch all turfs since the initial seed might not map directly to this exact admin ID.
-                const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/turfs`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/turfs`);
                 const data = await response.json();
                 setTurfs(data);
                 setLoading(false);
