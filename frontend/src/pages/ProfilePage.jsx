@@ -32,7 +32,7 @@ const ProfilePage = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/profile', {
+                const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -78,7 +78,7 @@ const ProfilePage = () => {
         const token = localStorage.getItem('token');
         
         try {
-            const response = await fetch('http://localhost:5000/api/auth/profile', {
+            const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',

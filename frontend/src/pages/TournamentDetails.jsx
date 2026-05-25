@@ -9,7 +9,7 @@ const TournamentDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/tournaments/${id}`)
+        fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tournaments/${id}`)
             .then(res => res.json())
             .then(data => {
                 setTournament(data);

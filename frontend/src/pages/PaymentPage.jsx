@@ -35,7 +35,7 @@ const PaymentPage = () => {
             }
 
             // 1. Create Order on Backend
-            const orderRes = await fetch('http://localhost:5000/api/payment/create-order', {
+            const orderRes = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/payment/create-order`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const PaymentPage = () => {
                 handler: async function (response) {
                     try {
                         // 3. Verify Payment
-                        const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+                        const verifyRes = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/payment/verify`, {
                             method: 'POST',
                             headers: { 
                                 'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const PaymentPage = () => {
                 bookingPayload.coachId = coachId;
             }
 
-            const response = await fetch('http://localhost:5000/api/bookings', {
+            const response = await fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

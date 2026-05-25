@@ -9,7 +9,7 @@ const TurfDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/turfs/${id}`)
+        fetch(`\${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/turfs/${id}`)
             .then(res => res.json())
             .then(data => {
                 setTurf(data);
